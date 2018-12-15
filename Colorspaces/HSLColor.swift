@@ -19,15 +19,20 @@ public struct HSLColor {
         self.luminance = l
     }
     
+    /// The UIColor equivalent of this HSL color.
     public var uiColor: UIColor {
         return UIColor(hue: CGFloat(self.hue), saturation: CGFloat(self.saturation), brightness: CGFloat(self.luminance), alpha: 1.0)
     }
     
+    /// The hexadecimal string representation of this HSL color.
     public var hex: String {
         let rgb = toRGB()
         return "#" + String(rgb.red, radix: 16) + String(rgb.green, radix: 16) + String(rgb.blue, radix: 16)
     }
     
+    /// Calculates and returns the RGB (Red, Green, Blue) equivalent of this HSL color.
+    ///
+    /// - Returns: The RGB equivalent of this HSL color.
     public func toRGB() -> RGBColor {
         var hCalc = Float(self.hue)
         let sCalc = Float(saturation)
@@ -57,6 +62,8 @@ public struct HSLColor {
         else if tmpB > 1 { tmpB -= 1 }
         return RGBColor(testRGB(tmpR, tmp1, tmp2), testRGB(tmpG, tmp1, tmp2), testRGB(tmpB, tmp1, tmp2))
     }
+    
+    // MARK: - Helper methods
     
     private func testRGB(_ channel: Float, _ tmp1: Float, _ tmp2: Float) -> Int {
         var color: Float = 0

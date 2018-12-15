@@ -19,16 +19,21 @@ public struct HSBColor {
         self.brightness = b
     }
     
+    /// The UIColor equivalent of this HSB color.
     public var uiColor: UIColor {
         let rgb = toRGB()
         return UIColor(red: CGFloat(rgb.red), green: CGFloat(rgb.green), blue: CGFloat(rgb.blue), alpha: 1.0)
     }
     
+    /// The hexadecimal string representation of this HSB color.
     public var hex: String {
         let rgb = toRGB()
         return "#" + String(rgb.red, radix: 16) + String(rgb.green, radix: 16) + String(rgb.blue, radix: 16)
     }
     
+    /// Calculates and returns the RGB (Red, Green, Blue) equivalent of this HSB color.
+    ///
+    /// - Returns: The RGB equivalent of this HSB color.
     public func toRGB() -> RGBColor {
         let chroma = Float(brightness * saturation)
         let _h = Float(hue)/Float(60)

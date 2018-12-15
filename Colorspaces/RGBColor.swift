@@ -9,24 +9,42 @@
 import Foundation
 
 public struct RGBColor {
+    
+    /// The red channel of this RGB color.
     public let red: Int
+    
+    /// The green channel of this RGB color.
     public let green: Int
+    
+    /// The blue channel of this RGB color.
     public let blue: Int
     
+    /// Initializes a new RGBColor object with the given red, green and blue channels (0-255).
+    ///
+    /// - Parameters:
+    ///   - r: The red channel.
+    ///   - g: The green channel.
+    ///   - b: The blue channel.
     public init(_ r: Int, _ g: Int, _ b: Int) {
         self.red = r
         self.green = g
         self.blue = b
     }
     
+    /// The UIColor equivalent of this RGB color.
     public var uiColor: UIColor {
         return UIColor(red: CGFloat(self.red), green: CGFloat(self.green), blue: CGFloat(self.blue), alpha: 1.0)
     }
     
+    /// The hexadecimal string representation of this RGB color.
     public var hex: String {
         return "#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
     }
     
+    /// Calculates and returns a monochromatic color of the given intensity for this RGB color.
+    ///
+    /// - Parameter intensity: How much to deviate in the monochromatic spectrum while calculating.
+    /// - Returns: A monochromatic color of the given intensity variance from this RGB color.
     public func getMonochromaticColor(intensity: Float) -> RGBColor {
         var red = Float(self.red) - (100 * intensity)
         if red < 0 { red += 255 }
@@ -39,6 +57,9 @@ public struct RGBColor {
         return RGBColor(Int(red), Int(green), Int(blue))
     }
     
+    /// Calculates and returns the complimentary color to this RGB color.
+    ///
+    /// - Returns: The complimentary color to this RGB color.
     public func getComplimentaryColor() -> RGBColor {
         let hsl = toHSL()
         let rounded = roundValues(color: hsl, rgb: false)
@@ -46,6 +67,9 @@ public struct RGBColor {
         return HSLColor(compliment, hsl.saturation, hsl.luminance).toRGB()
     }
     
+    /// Calculates and returns the two other colors in the split-complimentary color scheme of this RGB color.
+    ///
+    /// - Returns: The two other split-complimentary colors for this RGB color.
     public func getSplitComplimentaryColors() -> (RGBColor, RGBColor) {
         let hsl = toHSL()
         let rounded = roundValues(color: hsl, rgb: false)
@@ -55,6 +79,9 @@ public struct RGBColor {
         return (HSLColor(splitCompliment1, hsl.saturation, hsl.luminance).toRGB(), HSLColor(splitCompliment2, hsl.saturation, hsl.luminance).toRGB())
     }
     
+    /// Calculates and returns the two other colors in the analogous color scheme of this RGB color.
+    ///
+    /// - Returns: The two other analogous colors for this RGB color.
     public func getAnalogousColors() -> (RGBColor, RGBColor) {
         let hsl = toHSL()
         let rounded = roundValues(color: hsl, rgb: false)
@@ -63,6 +90,9 @@ public struct RGBColor {
         return (HSLColor(analogous1, hsl.saturation, hsl.luminance).toRGB(), HSLColor(analogous2, hsl.saturation, hsl.luminance).toRGB())
     }
     
+    /// Calculates and returns the two other colors in the triadic color scheme of this RGB color.
+    ///
+    /// - Returns: The two other triadic colors for this RGB color.
     public func getTriadicColors() -> (RGBColor, RGBColor) {
         let hsl = toHSL()
         let rounded = roundValues(color: hsl, rgb: false)
@@ -71,6 +101,9 @@ public struct RGBColor {
         return (HSLColor(triadic1, hsl.saturation, hsl.luminance).toRGB(), HSLColor(triadic2, hsl.saturation, hsl.luminance).toRGB())
     }
     
+    /// Calculates and returns the three other colors in the tetradic color scheme of this RGB color.
+    ///
+    /// - Returns: The three other tetradic colors for this RGB color.
     public func getTetradicColors() -> (RGBColor, RGBColor, RGBColor) {
         let hsl = toHSL()
         let rounded = roundValues(color: hsl, rgb: false)
@@ -90,6 +123,9 @@ public struct RGBColor {
         return (t1, t2, t3)
     }
     
+    /// Calculates and returns the HSL (Hue, Saturation, Luminosity) equivalent of this RGB color.
+    ///
+    /// - Returns: The HSL equivalent of this RGB color.
     public func toHSL() -> HSLColor {
         let norms = [Float(self.red/255), Float(self.green/255), Float(self.blue/255)]
         let red = norms[0]
@@ -122,6 +158,9 @@ public struct RGBColor {
         return HSLColor(Int(hue), Int(saturation), Int(luminance))
     }
     
+    /// Calculates and returns the CMYK (Cyan, Magenta, Yellow, Black) equivalent of this RGB color.
+    ///
+    /// - Returns: The CMYK equivalent of this RGB color.
     public func toCMYK() -> CMYKColor {
         let r = Float(red)/255.0
         let g = Float(green)/255.0
@@ -133,6 +172,9 @@ public struct RGBColor {
         return CMYKColor(Int(c), Int(m), Int(y), Int(k))
     }
     
+    /// Calculates and returns the HSB (Hue, Saturation, Brightness) equivalent of this RGB color.
+    ///
+    /// - Returns: The HSB equivalent of this RGB color.
     public func toHSB() -> HSBColor {
         var hue: Float = 0
         var saturation: Float = 0
@@ -165,6 +207,8 @@ public struct RGBColor {
         }
         return HSBColor(Int(hue), Int(saturation), Int(brightness))
     }
+    
+    // MARK: - Helper methods
     
     private func roundValues(color: HSLColor, rgb: Bool) -> RGBColor {
         var channel1: Int
