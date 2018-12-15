@@ -20,9 +20,12 @@ public struct HSLColor {
     }
     
     public var uiColor: UIColor {
-        get {
-            return UIColor(hue: CGFloat(self.hue), saturation: CGFloat(self.saturation), brightness: CGFloat(self.luminance), alpha: 1.0)
-        }
+        return UIColor(hue: CGFloat(self.hue), saturation: CGFloat(self.saturation), brightness: CGFloat(self.luminance), alpha: 1.0)
+    }
+    
+    public var hex: String {
+        let rgb = toRGB()
+        return "#" + String(rgb.red, radix: 16) + String(rgb.green, radix: 16) + String(rgb.blue, radix: 16)
     }
     
     public func toRGB() -> RGBColor {

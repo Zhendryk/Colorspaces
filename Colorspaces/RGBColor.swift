@@ -20,9 +20,11 @@ public struct RGBColor {
     }
     
     public var uiColor: UIColor {
-        get {
-            return UIColor(red: CGFloat(self.red), green: CGFloat(self.green), blue: CGFloat(self.blue), alpha: 1.0)
-        }
+        return UIColor(red: CGFloat(self.red), green: CGFloat(self.green), blue: CGFloat(self.blue), alpha: 1.0)
+    }
+    
+    public var hex: String {
+        return "#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
     }
     
     public func getMonochromaticColor(intensity: Float) -> RGBColor {
@@ -162,15 +164,6 @@ public struct RGBColor {
             if hue < 0 { hue += 360 }
         }
         return HSBColor(Int(hue), Int(saturation), Int(brightness))
-    }
-    
-    public func toHex(_ prependHash: Bool = false) -> String {
-        if prependHash {
-            return "#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
-        }
-        else {
-            return String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
-        }
     }
     
     private func roundValues(color: HSLColor, rgb: Bool) -> RGBColor {

@@ -20,10 +20,13 @@ public struct HSBColor {
     }
     
     public var uiColor: UIColor {
-        get {
-            let rgb = toRGB()
-            return UIColor(red: CGFloat(rgb.red), green: CGFloat(rgb.green), blue: CGFloat(rgb.blue), alpha: 1.0)
-        }
+        let rgb = toRGB()
+        return UIColor(red: CGFloat(rgb.red), green: CGFloat(rgb.green), blue: CGFloat(rgb.blue), alpha: 1.0)
+    }
+    
+    public var hex: String {
+        let rgb = toRGB()
+        return "#" + String(rgb.red, radix: 16) + String(rgb.green, radix: 16) + String(rgb.blue, radix: 16)
     }
     
     public func toRGB() -> RGBColor {
