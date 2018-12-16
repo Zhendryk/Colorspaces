@@ -10,13 +10,13 @@ import Foundation
 
 public struct RGBColor {
     
-    /// The red channel of this RGB color.
+    /// The red channel of this RGB color (0 - 255).
     public let red: Int
     
-    /// The green channel of this RGB color.
+    /// The green channel of this RGB color (0 - 255).
     public let green: Int
     
-    /// The blue channel of this RGB color.
+    /// The blue channel of this RGB color (0 - 255).
     public let blue: Int
     
     /// Initializes a new RGBColor object with the given red, green and blue channels (0-255).
@@ -127,7 +127,7 @@ public struct RGBColor {
     ///
     /// - Returns: The HSL equivalent of this RGB color.
     public func toHSL() -> HSLColor {
-        let norms = [Float(self.red/255), Float(self.green/255), Float(self.blue/255)]
+        let norms = [(Float(self.red)/255), (Float(self.green)/255), (Float(self.blue)/255)]
         let red = norms[0]
         let green = norms[1]
         let blue = norms[2]
@@ -155,76 +155,43 @@ public struct RGBColor {
         }
         hue *= 60
         if hue < 0 { hue += 360 }
-        return HSLColor(Int(hue), Int(saturation), Int(luminance))
-    }
-    
-    /// Calculates and returns the CMYK (Cyan, Magenta, Yellow, Black) equivalent of this RGB color.
-    ///
-    /// - Returns: The CMYK equivalent of this RGB color.
-    public func toCMYK() -> CMYKColor {
-        let r = Float(red)/255.0
-        let g = Float(green)/255.0
-        let b = Float(blue)/255.0
-        let k = 1.0 - max(r, g, b)
-        let c = (1.0 - r - k)/(1.0 - k)
-        let m = (1.0 - g - k)/(1.0 - k)
-        let y = (1.0 - b - k)/(1.0 - k)
-        return CMYKColor(Int(c), Int(m), Int(y), Int(k))
+        return HSLColor(Int(round(hue)), saturation, luminance)
     }
     
     /// Calculates and returns the HSB (Hue, Saturation, Brightness) equivalent of this RGB color.
     ///
     /// - Returns: The HSB equivalent of this RGB color.
     public func toHSB() -> HSBColor {
+        let _r = Float(red)/255
+        let _g = Float(green)/255
+        let _b = Float(blue)/255
+        let max = Swift.max(_r, _g, _b)
+        let min = Swift.min(_r, _g, _b)
+        let delta = max - min
         var hue: Float = 0
         var saturation: Float = 0
-        var brightness: Float = 0
-        let maxValue = max(red, green, blue)
-        let minValue = min(red, green, blue)
-        brightness = Float(maxValue)/255.0
-        if maxValue != 0 {
-            saturation = Float(maxValue - minValue)/Float(maxValue)
-        }
-        else { saturation = 0 }
-        if saturation == 0 { hue = 0 }
-        else {
-            let _r: Float = Float(maxValue - red)/Float(maxValue - minValue)
-            let _g: Float = Float(maxValue - green)/Float(maxValue - minValue)
-            let _b: Float = Float(maxValue - blue)/Float(maxValue - minValue)
-            if maxValue == minValue {
-                hue = 0
+        let brightness: Float = max
+        if !delta.isEqual(to: 0) && !max.isEqual(to: 0) {
+            if max.isEqual(to: _r) {
+                hue = 60 * (((_g - _b) / delta).mod(by: 6))
+                saturation = delta/max
             }
-            else if maxValue == red {
-                hue = 60 * (_b - _g)
-            }
-            else if maxValue == green {
-                hue = 60 * (2.0 + _r - _b)
+            else if max.isEqual(to: _g) {
+                hue = 60 * (((_b - _r) / delta) + 2)
+                saturation = delta/max
             }
             else {
-                hue = 60 * (4.0 + _g - _r)
+                hue = 60 * (((_r - _g) / delta) + 4)
+                saturation = delta/max
             }
-            if hue < 0 { hue += 360 }
         }
-        return HSBColor(Int(hue), Int(saturation), Int(brightness))
+        return HSBColor(Int(round(hue)), saturation, brightness)
     }
     
     // MARK: - Helper methods
     
     private func roundValues(color: HSLColor, rgb: Bool) -> RGBColor {
-        var channel1: Int
-        var channel2: Int
-        var channel3: Int
-        if rgb {
-            channel1 = color.hue
-            channel2 = color.saturation
-            channel3 = color.luminance
-        }
-        else {
-            channel1 = color.hue
-            channel2 = ((color.saturation*100)/100) * 100
-            channel3 = ((color.luminance*100)/100) * 100
-        }
-        return RGBColor(channel1, channel2, channel3)
+        return RGBColor(color.hue, Int(round(color.saturation * 100)), Int(round(color.luminance * 100)))
     }
     
     private func check360Bounds(_ num: Int) -> Int {

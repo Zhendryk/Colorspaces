@@ -9,11 +9,23 @@
 import Foundation
 
 public struct HSLColor {
-    public let hue: Int
-    public let saturation: Int
-    public let luminance: Int
     
-    public init(_ h: Int, _ s: Int, _ l: Int) {
+    /// The hue of this HSL color (0-360).
+    public let hue: Int
+    
+    /// The saturation of this HSL color (0 - 100% == 0.0 - 1.0).
+    public let saturation: Float
+    
+    /// The luminance of this HSL color (0 - 100% == 0.0 - 1.0).
+    public let luminance: Float
+    
+    /// Initializes a new HSLColor object with the given hue, saturation and luminance.
+    ///
+    /// - Parameters:
+    ///   - h: The hue (0 - 360).
+    ///   - s: The saturation (0.0 - 1.0).
+    ///   - l: The luminance (0.0 - 1.0).
+    public init(_ h: Int, _ s: Float, _ l: Float) {
         self.hue = h
         self.saturation = s
         self.luminance = l
@@ -26,8 +38,7 @@ public struct HSLColor {
     
     /// The hexadecimal string representation of this HSL color.
     public var hex: String {
-        let rgb = toRGB()
-        return "#" + String(rgb.red, radix: 16) + String(rgb.green, radix: 16) + String(rgb.blue, radix: 16)
+        return toRGB().hex
     }
     
     /// Calculates and returns the RGB (Red, Green, Blue) equivalent of this HSL color.
@@ -35,28 +46,27 @@ public struct HSLColor {
     /// - Returns: The RGB equivalent of this HSL color.
     public func toRGB() -> RGBColor {
         var hCalc = Float(self.hue)
-        let sCalc = Float(saturation)
-        let lCalc = Float(luminance)
-        if sCalc == 0.0 {
-            return RGBColor(Int(round((lCalc * 255.0))), Int(round((lCalc * 255.0))), Int(round((lCalc * 255.0))))
+        if saturation == 0.0 {
+            let grayValue = Int(luminance * 255)
+            return RGBColor(grayValue, grayValue, grayValue)
         }
         var tmp1: Float
-        if lCalc < 0.5 {
-            tmp1 = lCalc * (1.0 + sCalc)
+        if luminance < 0.5 {
+            tmp1 = luminance * (1 + saturation)
         }
         else {
-            tmp1 = lCalc + sCalc - lCalc * sCalc
+            tmp1 = luminance + saturation - luminance * saturation
         }
-        let tmp2: Float = 2.0 * lCalc - tmp1
+        let tmp2: Float = (2.0 * luminance) - tmp1
         hCalc /= 360
         var tmpR: Float = hCalc + 0.333
         if tmpR < 0 { tmpR += 1 }
         else if tmpR > 1 { tmpR -= 1 }
-        
+
         var tmpG: Float = hCalc
         if tmpG < 0 { tmpG += 1 }
         else if tmpG > 1 { tmpG -= 1 }
-        
+
         var tmpB: Float = hCalc - 0.333
         if tmpB < 0 { tmpB += 1 }
         else if tmpB > 1 { tmpB -= 1 }
@@ -76,7 +86,7 @@ public struct HSLColor {
             }
             else {
                 if (channel * 3) < 2 {
-                    color = (tmp2 + (tmp1 - tmp2) * (0.66 - channel) * 6)
+                    color = (tmp2 + (tmp1 - tmp2) * (0.666 - channel) * 6)
                 }
                 else {
                     color = tmp2
