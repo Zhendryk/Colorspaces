@@ -6,8 +6,6 @@
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
 
-import Foundation
-
 public struct HSLColor {
     
     /// The hue of this HSL color (0-360).
@@ -38,13 +36,13 @@ public struct HSLColor {
     
     /// The hexadecimal string representation of this HSL color.
     public var hex: String {
-        return toRGB().hex
+        return rgb.hex
     }
     
     /// Calculates and returns the RGB (Red, Green, Blue) equivalent of this HSL color.
     ///
     /// - Returns: The RGB equivalent of this HSL color.
-    public func toRGB() -> RGBColor {
+    public var rgb: RGBColor {
         var hCalc = Float(self.hue)
         if saturation == 0.0 {
             let grayValue = Int(luminance * 255)
@@ -62,11 +60,11 @@ public struct HSLColor {
         var tmpR: Float = hCalc + 0.333
         if tmpR < 0 { tmpR += 1 }
         else if tmpR > 1 { tmpR -= 1 }
-
+        
         var tmpG: Float = hCalc
         if tmpG < 0 { tmpG += 1 }
         else if tmpG > 1 { tmpG -= 1 }
-
+        
         var tmpB: Float = hCalc - 0.333
         if tmpB < 0 { tmpB += 1 }
         else if tmpB > 1 { tmpB -= 1 }
@@ -75,7 +73,7 @@ public struct HSLColor {
     
     // MARK: - Helper methods
     
-    private func testRGB(_ channel: Float, _ tmp1: Float, _ tmp2: Float) -> Int {
+    fileprivate func testRGB(_ channel: Float, _ tmp1: Float, _ tmp2: Float) -> Int {
         var color: Float = 0
         if (channel * 6) < 1 {
             color = (tmp2 + (tmp1 - tmp2) * 6 * channel)

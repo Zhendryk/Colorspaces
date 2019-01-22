@@ -6,8 +6,6 @@
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
 
-import Foundation
-
 public struct HSBColor {
     
     /// The hue of this HSB color (0 - 360).
@@ -33,18 +31,18 @@ public struct HSBColor {
     
     /// The UIColor equivalent of this HSB color.
     public var uiColor: UIColor {
-        return toRGB().uiColor
+        return rgb.uiColor
     }
     
     /// The hexadecimal string representation of this HSB color.
     public var hex: String {
-        return toRGB().hex
+        return rgb.hex
     }
-    
+
     /// Calculates and returns the RGB (Red, Green, Blue) equivalent of this HSB color.
     ///
     /// - Returns: The RGB equivalent of this HSB color.
-    public func toRGB() -> RGBColor {
+    public var rgb: RGBColor {
         let chroma = brightness * saturation
         let x = chroma * (1 - abs((Float(hue) / 60).mod(by: 2) - 1))
         let m = brightness - chroma

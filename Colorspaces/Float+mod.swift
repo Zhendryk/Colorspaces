@@ -6,8 +6,6 @@
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
 
-import Foundation
-
 public extension Float {
     
     /// The modulus operator for floating point numbers. (Works for both positive and negative).
