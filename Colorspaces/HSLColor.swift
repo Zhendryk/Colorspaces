@@ -31,7 +31,7 @@ public struct HSLColor {
     
     /// The UIColor equivalent of this HSL color.
     public var uiColor: UIColor {
-        return UIColor(hue: CGFloat(self.hue), saturation: CGFloat(self.saturation), brightness: CGFloat(self.luminance), alpha: 1.0)
+        return UIColor(hue: CGFloat(self.hue)/360.0, saturation: CGFloat(self.saturation), brightness: CGFloat(self.luminance), alpha: 1.0)
     }
     
     /// The hexadecimal string representation of this HSL color.

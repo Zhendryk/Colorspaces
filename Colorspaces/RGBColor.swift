@@ -96,7 +96,7 @@ public struct RGBColor {
     
     /// The UIColor equivalent of this RGB color.
     public var uiColor: UIColor {
-        return UIColor(red: CGFloat(self.red), green: CGFloat(self.green), blue: CGFloat(self.blue), alpha: 1.0)
+        return UIColor(red: CGFloat(self.red)/255.0, green: CGFloat(self.green)/255.0, blue: CGFloat(self.blue)/255.0, alpha: 1.0)
     }
     
     /// The hexadecimal string representation of this RGB color.
