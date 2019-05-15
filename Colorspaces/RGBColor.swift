@@ -61,7 +61,7 @@ public struct RGBColor {
         }
         hue *= 60
         if hue < 0 { hue += 360 }
-        return HSLColor(Int(round(hue)), saturation, luminance)
+        return HSLColor(Int(round(hue.nanSafe())), saturation.nanSafe(), luminance)
     }
     
     /// Calculates and returns the HSB (Hue, Saturation, Brightness) equivalent of this RGB color.
@@ -91,7 +91,7 @@ public struct RGBColor {
                 saturation = delta/max
             }
         }
-        return HSBColor(Int(round(hue)), saturation, brightness)
+        return HSBColor(Int(round(hue.nanSafe())), saturation.nanSafe(), brightness)
     }
     
     /// The UIColor equivalent of this RGB color.

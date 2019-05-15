@@ -68,12 +68,12 @@ public struct HSLColor {
         var tmpB: Float = hCalc - 0.333
         if tmpB < 0 { tmpB += 1 }
         else if tmpB > 1 { tmpB -= 1 }
-        return RGBColor(testRGB(tmpR, tmp1, tmp2), testRGB(tmpG, tmp1, tmp2), testRGB(tmpB, tmp1, tmp2))
+        return RGBColor(alignColorChannel(tmpR, tmp1, tmp2), alignColorChannel(tmpG, tmp1, tmp2), alignColorChannel(tmpB, tmp1, tmp2))
     }
     
     // MARK: - Helper methods
     
-    fileprivate func testRGB(_ channel: Float, _ tmp1: Float, _ tmp2: Float) -> Int {
+    fileprivate func alignColorChannel(_ channel: Float, _ tmp1: Float, _ tmp2: Float) -> Int {
         var color: Float = 0
         if (channel * 6) < 1 {
             color = (tmp2 + (tmp1 - tmp2) * 6 * channel)
