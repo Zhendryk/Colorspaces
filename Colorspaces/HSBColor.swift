@@ -83,10 +83,12 @@ public struct HSBColor {
 
     /// Calculates and returns a monochromatic color of the given intensity for this HSBColor.
     ///
-    /// - Parameter intensity: How much to deviate in the monochromatic spectrum while calculating.
+    /// - Parameters:
+    ///   - saturationMultiplier: How much to deviate from the original saturation.
+    ///   - lightnessMultiplier: How much to deviate from the original brightness.
     /// - Returns: A monochromatic color of the given intensity variance from this HSBColor.
-    public func monochromaticColor(intensity: CGFloat) -> HSBColor {
-        return HSBColor(hue, (saturation * intensity).normalized, (brightness * intensity).normalized, alpha)
+    public func monochromaticColor(saturationMultiplier: CGFloat = 1, brightnessMultiplier: CGFloat = 1) -> HSBColor {
+        return HSBColor(hue, (saturation * saturationMultiplier).normalized, (brightness * brightnessMultiplier).normalized, alpha)
     }
 
     /// Calculates the complimentary color to this HSBColor (+-180 degrees on the color wheel)
@@ -99,8 +101,8 @@ public struct HSBColor {
     /// Calculates the two split complimentary colors to this HSBColor (+210 / -150 degrees on the color wheel)
     public var splitComplimentaryColors: (HSBColor, HSBColor) {
         get {
-            let splitComplimentHue1 = (hue + 210).circleBounded
-            let splitComplimentHue2 = (hue - 150).circleBounded
+            let splitComplimentHue1 = (hue + 150).circleBounded
+            let splitComplimentHue2 = (hue + 210).circleBounded
             return (
                 HSBColor(splitComplimentHue1, saturation, brightness, alpha),
                 HSBColor(splitComplimentHue2, saturation, brightness, alpha)
