@@ -8,186 +8,115 @@
 
 public struct RGBColor {
     
-    /// The red channel of this RGB color (0 - 255).
+    /// The red channel of this RGBColor (0 - 255).
     public let red: Int
     
-    /// The green channel of this RGB color (0 - 255).
+    /// The green channel of this RGBColor (0 - 255).
     public let green: Int
     
-    /// The blue channel of this RGB color (0 - 255).
+    /// The blue channel of this RGBColor (0 - 255).
     public let blue: Int
+
+    /// The alpha channel of this RGBColor (0.0 - 1.0)
+    public let alpha: CGFloat
     
     /// Initializes a new RGBColor object with the given red, green and blue channels (0-255).
     ///
     /// - Parameters:
-    ///   - r: The red channel.
-    ///   - g: The green channel.
-    ///   - b: The blue channel.
-    public init(_ r: Int, _ g: Int, _ b: Int) {
+    ///   - r: The red channel (0 - 255).
+    ///   - g: The green channel (0 - 255).
+    ///   - b: The blue channel (0 - 255).
+    ///   - a: The alpha (0.0 - 1.0).
+    public init(_ r: Int, _ g: Int, _ b: Int, _ a: CGFloat = 1) {
         self.red = r
         self.green = g
         self.blue = b
+        self.alpha = a
     }
     
-    /// Calculates and returns the HSL (Hue, Saturation, Luminosity) equivalent of this RGB color.
+    /// Calculates and returns the HSL (Hue, Saturation, Lightness) equivalent of this RGB color.
     ///
     /// - Returns: The HSL equivalent of this RGB color.
     public var hsl: HSLColor {
-        let norms = [(Float(self.red)/255), (Float(self.green)/255), (Float(self.blue)/255)]
-        let red = norms[0]
-        let green = norms[1]
-        let blue = norms[2]
-        let max = norms.max()!
-        let min = norms.min()!
-        let luminance = (max + min)/2
-        var saturation: Float = 0
-        var hue: Float = 0
-        if !min.isEqual(to: max) {
-            if luminance < 0.5 {
-                saturation = (max - min)/(max + min)
-            }
-            else {
-                saturation = (max - min)/(2.0 - max - min)
+        let r = CGFloat(red)/255, g = CGFloat(
+            green)/255, b = CGFloat(blue)/255
+        let max: CGFloat = Swift.max(r, g, b)
+        let min: CGFloat = Swift.min(r, g, b)
+        var hue: CGFloat = 0, saturation: CGFloat = 0, lightness: CGFloat = (max + min) / 2
+        if min != max {
+            if lightness < 0.5 {
+                saturation = (max - min) &/ (max + min)
+            } else {
+                saturation = (max - min) &/ (2 - max - min)
             }
         }
-        if max.isEqual(to: red) {
-            hue = (green - blue)/(max - min)
-        }
-        else if max.isEqual(to: green) {
-            hue = 2.0 + ((blue - red)/(max - min))
-        }
-        else {
-            hue = 4.0 + ((red - green)/(max - min))
+        if max == r {
+            hue = (g - b) &/ (max - min)
+        } else if max == g {
+            hue = ((b - r) &/ (max - min)) + 2
+        } else {
+            hue = ((r - g) &/ (max - min)) + 4
         }
         hue *= 60
         if hue < 0 { hue += 360 }
-        return HSLColor(Int(round(hue.nanSafe())), saturation.nanSafe(), luminance)
+        return HSLColor(Int(hue.rounded()), saturation, lightness)
     }
     
     /// Calculates and returns the HSB (Hue, Saturation, Brightness) equivalent of this RGB color.
     ///
     /// - Returns: The HSB equivalent of this RGB color.
     public var hsb: HSBColor {
-        let _r = Float(red)/255
-        let _g = Float(green)/255
-        let _b = Float(blue)/255
-        let max = Swift.max(_r, _g, _b)
-        let min = Swift.min(_r, _g, _b)
+        let r = CGFloat(red)/255, g = CGFloat(
+            green)/255, b = CGFloat(blue)/255
+        let max = Swift.max(r, g, b)
+        let min = Swift.min(r, g, b)
         let delta = max - min
-        var hue: Float = 0
-        var saturation: Float = 0
-        let brightness: Float = max
-        if !delta.isEqual(to: 0) && !max.isEqual(to: 0) {
-            if max.isEqual(to: _r) {
-                hue = 60 * (((_g - _b) / delta).mod(by: 6))
-                saturation = delta/max
-            }
-            else if max.isEqual(to: _g) {
-                hue = 60 * (((_b - _r) / delta) + 2)
-                saturation = delta/max
-            }
-            else {
-                hue = 60 * (((_r - _g) / delta) + 4)
-                saturation = delta/max
-            }
+        var hue: CGFloat, saturation: CGFloat, brightness: CGFloat = max
+        // Hue calculation
+        if delta.isZero {
+            hue = 0
         }
-        return HSBColor(Int(round(hue.nanSafe())), saturation.nanSafe(), brightness)
+        if max == r {
+            hue = 60 * (((g - b) &/ delta) % 6)
+        } else if max == g {
+            hue = 60 * (((b - r) &/ delta) + 2)
+        } else {
+            hue = 60 * (((r - g) &/ delta) + 4)
+        }
+        // Saturation calculation
+        if max.isZero {
+            saturation = 0
+        } else {
+            saturation = delta &/ max
+        }
+        return HSBColor(Int(hue.rounded()), saturation, brightness)
     }
     
     /// The UIColor equivalent of this RGB color.
     public var uiColor: UIColor {
-        return UIColor(red: CGFloat(self.red)/255.0, green: CGFloat(self.green)/255.0, blue: CGFloat(self.blue)/255.0, alpha: 1.0)
+        return UIColor(red: CGFloat(red)/255, green: CGFloat(green)/255, blue: CGFloat(blue)/255, alpha: alpha)
     }
     
     /// The hexadecimal string representation of this RGB color.
     public var hex: String {
         return "#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
     }
-    
-    /// Calculates and returns a monochromatic color of the given intensity for this RGB color.
+
+    /// Returns a formatted string of this color in the format: "(r: `self.red`, g: `self.green`, b: `self.blue`, a: `self.alpha`)"
+    public var string: String {
+        get {
+            return "(r: \(red), g: \(green), b: \(blue), a: \(alpha))"
+        }
+    }
+
+    /// Returns the euclidean distance between this and another RGBColor.
     ///
-    /// - Parameter intensity: How much to deviate in the monochromatic spectrum while calculating.
-    /// - Returns: A monochromatic color of the given intensity variance from this RGB color.
-    public func getMonochromaticColor(intensity: Float) -> RGBColor {
-        let hsb = self.hsb
-        return HSBColor(hsb.hue, hsb.saturation * (1.0 + intensity), hsb.brightness * (1.0 + intensity)).rgb
-    }
-    
-    /// Calculates and returns the complimentary color to this RGB color.
-    ///
-    /// - Returns: The complimentary color to this RGB color.
-    public func getComplimentaryColor() -> RGBColor {
-        let hsl = self.hsl
-        let rounded = roundValues(color: hsl, rgb: false)
-        let compliment = check360Bounds(rounded.red + 180)
-        return HSLColor(compliment, hsl.saturation, hsl.luminance).rgb
-    }
-    
-    /// Calculates and returns the two other colors in the split-complimentary color scheme of this RGB color.
-    ///
-    /// - Returns: The two other split-complimentary colors for this RGB color.
-    public func getSplitComplimentaryColors() -> (RGBColor, RGBColor) {
-        let hsl = self.hsl
-        let rounded = roundValues(color: hsl, rgb: false)
-        let compliment = check360Bounds(rounded.red + 180)
-        let splitCompliment1 = check360Bounds(compliment + 30)
-        let splitCompliment2 = check360Bounds(compliment - 30)
-        return (HSLColor(splitCompliment1, hsl.saturation, hsl.luminance).rgb, HSLColor(splitCompliment2, hsl.saturation, hsl.luminance).rgb)
-    }
-    
-    /// Calculates and returns the two other colors in the analogous color scheme of this RGB color.
-    ///
-    /// - Returns: The two other analogous colors for this RGB color.
-    public func getAnalogousColors() -> (RGBColor, RGBColor) {
-        let hsl = self.hsl
-        let rounded = roundValues(color: hsl, rgb: false)
-        let analogous1 = check360Bounds(rounded.red + 30)
-        let analogous2 = check360Bounds(rounded.red - 30)
-        return (HSLColor(analogous1, hsl.saturation, hsl.luminance).rgb, HSLColor(analogous2, hsl.saturation, hsl.luminance).rgb)
-    }
-    
-    /// Calculates and returns the two other colors in the triadic color scheme of this RGB color.
-    ///
-    /// - Returns: The two other triadic colors for this RGB color.
-    public func getTriadicColors() -> (RGBColor, RGBColor) {
-        let hsl = self.hsl
-        let rounded = roundValues(color: hsl, rgb: false)
-        let triadic1 = check360Bounds(rounded.red + 120)
-        let triadic2 = check360Bounds(rounded.red - 120)
-        return (HSLColor(triadic1, hsl.saturation, hsl.luminance).rgb, HSLColor(triadic2, hsl.saturation, hsl.luminance).rgb)
-    }
-    
-    /// Calculates and returns the three other colors in the tetradic color scheme of this RGB color.
-    ///
-    /// - Returns: The three other tetradic colors for this RGB color.
-    public func getTetradicColors() -> (RGBColor, RGBColor, RGBColor) {
-        let hsl = self.hsl
-        let rounded = roundValues(color: hsl, rgb: false)
-        var tetra1 = rounded.red + 60
-        if tetra1 > 360 { tetra1 -= 360 }
-        
-        var tetra2 = rounded.red + 180
-        if tetra2 > 360 { tetra2 -= 360 }
-        
-        var tetra3 = tetra1 + 180
-        if tetra3 > 360 { tetra3 -= 360 }
-        
-        let t1 = HSLColor(tetra1, hsl.saturation, hsl.luminance).rgb
-        let t2 = HSLColor(tetra2, hsl.saturation, hsl.luminance).rgb
-        let t3 = HSLColor(tetra3, hsl.saturation, hsl.luminance).rgb
-        
-        return (t1, t2, t3)
-    }
-    
-    // MARK: - Helper methods
-    
-    fileprivate func roundValues(color: HSLColor, rgb: Bool) -> RGBColor {
-        return RGBColor(color.hue, Int(round(color.saturation * 100)), Int(round(color.luminance * 100)))
-    }
-    
-    fileprivate func check360Bounds(_ num: Int) -> Int {
-        if num > 360 { return num - 360 }
-        else if num < 0 { return num + 360 }
-        else { return num }
+    /// - Parameter color: The color you are measuring distance to.
+    /// - Returns: The euclidean distance from this color to the given color.
+    public func distance(from color: RGBColor) -> Double {
+        let x = pow(Double(red - color.red), 2)
+        let y = pow(Double(green - color.green), 2)
+        let z = pow(Double(blue - color.blue), 2)
+        return sqrt(x + y + z)
     }
 }

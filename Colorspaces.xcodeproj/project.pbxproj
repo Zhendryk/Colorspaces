@@ -11,7 +11,8 @@
 		1971DA3921C5796B00213E85 /* RGBColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1971DA3821C5796B00213E85 /* RGBColor.swift */; };
 		1971DA3D21C5797C00213E85 /* HSLColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1971DA3C21C5797C00213E85 /* HSLColor.swift */; };
 		1971DA3F21C5798700213E85 /* HSBColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1971DA3E21C5798700213E85 /* HSBColor.swift */; };
-		1971DAA321C60B1800213E85 /* Float+mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1971DAA221C60B1800213E85 /* Float+mod.swift */; };
+		1971DAA321C60B1800213E85 /* CGFloat+mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1971DAA221C60B1800213E85 /* CGFloat+mod.swift */; };
+		19DC9D38228DE9C500CB4B27 /* Int+circleBounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DC9D37228DE9C500CB4B27 /* Int+circleBounded.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +22,8 @@
 		1971DA3821C5796B00213E85 /* RGBColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBColor.swift; sourceTree = "<group>"; };
 		1971DA3C21C5797C00213E85 /* HSLColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSLColor.swift; sourceTree = "<group>"; };
 		1971DA3E21C5798700213E85 /* HSBColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSBColor.swift; sourceTree = "<group>"; };
-		1971DAA221C60B1800213E85 /* Float+mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float+mod.swift"; sourceTree = "<group>"; };
+		1971DAA221C60B1800213E85 /* CGFloat+mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+mod.swift"; sourceTree = "<group>"; };
+		19DC9D37228DE9C500CB4B27 /* Int+circleBounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+circleBounded.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +61,8 @@
 				1971DA3821C5796B00213E85 /* RGBColor.swift */,
 				1971DA3C21C5797C00213E85 /* HSLColor.swift */,
 				1971DA3E21C5798700213E85 /* HSBColor.swift */,
-				1971DAA221C60B1800213E85 /* Float+mod.swift */,
+				1971DAA221C60B1800213E85 /* CGFloat+mod.swift */,
+				19DC9D37228DE9C500CB4B27 /* Int+circleBounded.swift */,
 			);
 			path = Colorspaces;
 			sourceTree = "<group>";
@@ -143,10 +146,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19DC9D38228DE9C500CB4B27 /* Int+circleBounded.swift in Sources */,
 				1971DA3921C5796B00213E85 /* RGBColor.swift in Sources */,
 				1971DA3D21C5797C00213E85 /* HSLColor.swift in Sources */,
 				1971DA3F21C5798700213E85 /* HSBColor.swift in Sources */,
-				1971DAA321C60B1800213E85 /* Float+mod.swift in Sources */,
+				1971DAA321C60B1800213E85 /* CGFloat+mod.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
