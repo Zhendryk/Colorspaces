@@ -34,16 +34,4 @@ public extension CGFloat {
         if rhs == 0 { return 0 }
         return lhs/rhs
     }
-
-
-    /// Returns self as a value between
-    var normalized: CGFloat {
-        if self < 1 {
-            return (self + 1)
-        } else if self > 1 {
-            return (self - 1)
-        } else {
-            return self
-        }
-    }
 }

@@ -78,7 +78,7 @@ public struct HSBColor {
             r = chroma
             b = x
         }
-        return RGBColor(Int((r + m)*255), Int((g + m)*255), Int((b + m)*255), alpha)
+        return RGBColor(Int((r + m) * 255), Int((g + m) * 255), Int((b + m) * 255), alpha)
     }
 
     /// Calculates and returns a monochromatic color of the given intensity for this HSBColor.
@@ -87,8 +87,8 @@ public struct HSBColor {
     ///   - saturationMultiplier: How much to deviate from the original saturation.
     ///   - lightnessMultiplier: How much to deviate from the original brightness.
     /// - Returns: A monochromatic color of the given intensity variance from this HSBColor.
-    public func monochromaticColor(saturationMultiplier: CGFloat = 1, brightnessMultiplier: CGFloat = 1) -> HSBColor {
-        return HSBColor(hue, (saturation * saturationMultiplier).normalized, (brightness * brightnessMultiplier).normalized, alpha)
+    public func monochromaticColor(saturation s: CGFloat? = nil, brightness b: CGFloat? = nil) -> HSBColor {
+        return HSBColor(hue, s ?? self.saturation, b ?? self.brightness, alpha)
     }
 
     /// Calculates the complimentary color to this HSBColor (+-180 degrees on the color wheel)
@@ -98,7 +98,7 @@ public struct HSBColor {
         }
     }
 
-    /// Calculates the two split complimentary colors to this HSBColor (+210 / -150 degrees on the color wheel)
+    /// Calculates the two split complimentary colors to this HSBColor (+150, +210 degrees on the color wheel)
     public var splitComplimentaryColors: (HSBColor, HSBColor) {
         get {
             let splitComplimentHue1 = (hue + 150).circleBounded
@@ -134,12 +134,12 @@ public struct HSBColor {
         }
     }
 
-    /// Calculates the three tetradic colors to this HSBColor (+60, +180, +240 degrees on the color wheel)
+    /// Calculates the three tetradic colors to this HSBColor (+90, +180, +270 degrees on the color wheel)
     public var tetradicColors: (HSBColor, HSBColor, HSBColor) {
         get {
-            let tetradicHue1 = (hue + 60).circleBounded
+            let tetradicHue1 = (hue + 90).circleBounded
             let tetradicHue2 = (hue + 180).circleBounded
-            let tetradicHue3 = (hue + 240).circleBounded
+            let tetradicHue3 = (hue + 270).circleBounded
             return (
                 HSBColor(tetradicHue1, saturation, brightness, alpha),
                 HSBColor(tetradicHue2, saturation, brightness, alpha),

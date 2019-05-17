@@ -88,8 +88,8 @@ public struct HSLColor {
     ///   - saturationMultiplier: How much to deviate from the original saturation.
     ///   - lightnessMultiplier: How much to deviate from the original lightness.
     /// - Returns: A monochromatic color of the given intensity variance from this HSLColor.
-    public func monochromaticColor(saturationMultiplier: CGFloat = 1, lightnessMultiplier: CGFloat = 1) -> HSBColor {
-        return HSBColor(hue, (saturation * saturationMultiplier).normalized, (lightness * lightnessMultiplier).normalized, alpha)
+    public func monochromaticColor(saturation s: CGFloat? = nil, lightness l: CGFloat? = nil) -> HSBColor {
+        return HSBColor(hue, s ?? self.saturation, l ?? self.lightness, alpha)
     }
 
     /// Calculates the complimentary color to this HSLColor (+-180 degrees on the color wheel)
@@ -99,7 +99,7 @@ public struct HSLColor {
         }
     }
 
-    /// Calculates the two split complimentary colors to this HSLColor (+210 / -150 degrees on the color wheel)
+    /// Calculates the two split complimentary colors to this HSLColor (+150, +210 degrees on the color wheel)
     public var splitComplimentaryColors: (HSLColor, HSLColor) {
         get {
             let splitComplimentHue1 = (hue + 150).circleBounded
@@ -135,12 +135,12 @@ public struct HSLColor {
         }
     }
 
-    /// Calculates the three tetradic colors to this HSLColor (+60, +180, +240 degrees on the color wheel)
+    /// Calculates the three tetradic colors to this HSLColor (+90, +180, +270 degrees on the color wheel)
     public var tetradicColors: (HSLColor, HSLColor, HSLColor) {
         get {
-            let tetradicHue1 = (hue + 60).circleBounded
+            let tetradicHue1 = (hue + 90).circleBounded
             let tetradicHue2 = (hue + 180).circleBounded
-            let tetradicHue3 = (hue + 240).circleBounded
+            let tetradicHue3 = (hue + 270).circleBounded
             return (
                 HSLColor(tetradicHue1, saturation, lightness, alpha),
                 HSLColor(tetradicHue2, saturation, lightness, alpha),
