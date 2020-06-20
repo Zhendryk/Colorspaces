@@ -1,5 +1,12 @@
 .DS_Store
 /.build
 /Packages
-/*.xcodeproj
 xcuserdata/
+/.swiftpm
+
+### Xcode Patch ###
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
