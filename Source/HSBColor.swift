@@ -5,6 +5,7 @@
 //  Created by Jonathan Bailey on 12/15/18.
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
+import UIKit
 
 public struct HSBColor {
     
@@ -56,7 +57,7 @@ public struct HSBColor {
     /// - Returns: The RGB equivalent of this HSBColor.
     public var rgb: RGBColor {
         let chroma = brightness * saturation
-        let x = chroma * (1 - (abs((CGFloat(hue) / 60) % 2) - 1))
+        let x = chroma * (1 - (abs((CGFloat(hue) / 60) % 2 - 1)))
         let m = brightness - chroma
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
         if (hue >= 0 || hue == 360) && hue < 60 {

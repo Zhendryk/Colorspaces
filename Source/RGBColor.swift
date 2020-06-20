@@ -5,6 +5,7 @@
 //  Created by Jonathan Bailey on 12/15/18.
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
+import UIKit
 
 public struct RGBColor {
     
@@ -99,13 +100,87 @@ public struct RGBColor {
     
     /// The hexadecimal string representation of this RGB color.
     public var hex: String {
-        return "#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)
+        return ("#" + String(red, radix: 16) + String(green, radix: 16) + String(blue, radix: 16)).uppercased()
     }
 
     /// Returns a formatted string of this color in the format: "(r: `self.red`, g: `self.green`, b: `self.blue`, a: `self.alpha`)"
     public var string: String {
         get {
             return "(r: \(red), g: \(green), b: \(blue), a: \(alpha))"
+        }
+    }
+
+    /// Calculates and returns a monochromatic color of the given intensity for this RGBColor.
+    ///
+    /// - Parameters:
+    ///    - saturationMultiplier: How much to deviate from the original saturation.
+    ///    - lightnessMultiplier: How much to deviate from the original lightness.
+    /// - Returns: A monochromatic color of the given intensity variance from this RGBColor.
+    public func monochromaticColor(saturation s: CGFloat? = nil, lightness l: CGFloat? = nil) -> RGBColor {
+        let hsl = self.hsl
+        return HSLColor(hsl.hue, s ?? hsl.saturation, l ?? hsl.lightness, hsl.alpha).rgb
+    }
+
+
+    /// Calculates the complimentary color to this RGBColor (+- 180 degrees on the color wheel)
+    public var complimentaryColor: RGBColor {
+        get {
+            let hsl = self.hsl
+            return HSLColor((hsl.hue + 180).circleBounded, hsl.saturation, hsl.lightness, hsl.alpha).rgb
+        }
+    }
+
+    /// Calculates the two split complimentary colors to this RGBColor (+150, +210 degrees on the color wheel)
+    public var splitComplimentaryColors: (RGBColor, RGBColor) {
+        get {
+            let hsl = self.hsl
+            let splitComplimentHue1 = (hsl.hue + 150).circleBounded
+            let splitComplimentHue2 = (hsl.hue + 210).circleBounded
+            return (
+                HSLColor(splitComplimentHue1, hsl.saturation, hsl.lightness, hsl.alpha).rgb,
+                HSLColor(splitComplimentHue2, hsl.saturation, hsl.lightness, hsl.alpha).rgb
+            )
+        }
+    }
+
+    /// Calculates the two analogous colors to this RGBColor (+-30 degrees on the color wheel)
+    public var analogousColors: (RGBColor, RGBColor) {
+        get {
+            let hsl = self.hsl
+            let analogousHue1 = (hsl.hue + 30).circleBounded
+            let analogousHue2 = (hsl.hue - 30).circleBounded
+            return (
+                HSLColor(analogousHue1, hsl.saturation, hsl.lightness, hsl.alpha).rgb,
+                HSLColor(analogousHue2, hsl.saturation, hsl.lightness, hsl.alpha).rgb
+            )
+        }
+    }
+
+    /// Calculates the two triadic colors to this RGBColor (+-120 degrees on the color wheel)
+    public var triadicColors: (RGBColor, RGBColor) {
+        get {
+            let hsl = self.hsl
+            let triadicHue1 = (hsl.hue + 120).circleBounded
+            let triadicHue2 = (hsl.hue - 120).circleBounded
+            return(
+                HSLColor(triadicHue1, hsl.saturation, hsl.lightness, hsl.alpha).rgb,
+                HSLColor(triadicHue2, hsl.saturation, hsl.lightness, hsl.alpha).rgb
+            )
+        }
+    }
+
+    /// Calculates the three tetradic colors to this RGBColor (+90, +180, +270 degrees on the color wheel)
+    public var tetradicColors: (RGBColor, RGBColor, RGBColor) {
+        get {
+            let hsl = self.hsl
+            let tetradicHue1 = (hsl.hue + 90).circleBounded
+            let tetradicHue2 = (hsl.hue + 180).circleBounded
+            let tetradicHue3 = (hsl.hue + 270).circleBounded
+            return (
+                HSLColor(tetradicHue1, hsl.saturation, hsl.lightness, hsl.alpha).rgb,
+                HSLColor(tetradicHue2, hsl.saturation, hsl.lightness, hsl.alpha).rgb,
+                HSLColor(tetradicHue3, hsl.saturation, hsl.lightness, hsl.alpha).rgb
+            )
         }
     }
 

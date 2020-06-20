@@ -7,8 +7,9 @@
 //
 infix operator &/
 infix operator %
+import UIKit
 
-public extension CGFloat {
+internal extension CGFloat {
 
     /// The modulus operator. Works for both positive and negative numbers.
     ///

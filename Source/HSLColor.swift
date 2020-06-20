@@ -5,6 +5,7 @@
 //  Created by Jonathan Bailey on 12/15/18.
 //  Copyright © 2018 Jonathan Bailey. All rights reserved.
 //
+import UIKit
 
 public struct HSLColor {
     
@@ -88,8 +89,8 @@ public struct HSLColor {
     ///   - saturationMultiplier: How much to deviate from the original saturation.
     ///   - lightnessMultiplier: How much to deviate from the original lightness.
     /// - Returns: A monochromatic color of the given intensity variance from this HSLColor.
-    public func monochromaticColor(saturation s: CGFloat? = nil, lightness l: CGFloat? = nil) -> HSBColor {
-        return HSBColor(hue, s ?? self.saturation, l ?? self.lightness, alpha)
+    public func monochromaticColor(saturation s: CGFloat? = nil, lightness l: CGFloat? = nil) -> HSLColor {
+        return HSLColor(hue, s ?? self.saturation, l ?? self.lightness, alpha)
     }
 
     /// Calculates the complimentary color to this HSLColor (+-180 degrees on the color wheel)
