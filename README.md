@@ -1,8 +1,8 @@
 # Colorspaces
 
-#### A simple Swift library allowing for the easy creation and manipulation of colors throughout various colorspaces.
+> A simple Swift library allowing for the easy creation and manipulation of colors throughout various colorspaces.
 
-#### This library is made available as a Swift Package. To use it as a dependency in your project [see this documentation from Apple.](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
+> This library is made available as a Swift Package. To use it as a dependency in your project [see this documentation from Apple.](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
 
 <img src="Assets/RGB_3D.png" width="25%"> <img src="Assets/HSL_3D.png" width="25%"> <img src="Assets/HSV_3D.png" width="25%">
 
